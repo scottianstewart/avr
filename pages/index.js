@@ -1,24 +1,22 @@
 import Head from 'next/head'
 
-import { fetchEntries } from '@utils/contentfulPosts'
+import { fetchEntries } from '@utils/contentfulEntries'
 
-import Header from '@components/Header'
 import Footer from '@components/Footer'
-import Post from '@components/Post'
+import RecipeCard from '@components/RecipeCard'
 
-export default function Home({ posts }) {
+export default function Home({ recipes }) {
   return (
     <div className="container">
       <Head>
-        <title>Next + Contentful Starter</title>
+        <title>A.V.R</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>
-        <Header />
-        <div className="posts">
-          {posts.map((p) => {
-            return <Post key={p.date} date={p.date} image={p.image.fields} title={p.title} />
+        <div className="recipe-grid">
+          {recipes.map((p) => {
+            return <RecipeCard key={p.title} image={p.recipeImage.fields} title={p.title} />
           })}
         </div>
       </main>
@@ -38,12 +36,9 @@ export default function Home({ posts }) {
           padding: 5rem 0;
           flex: 1;
           display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
         }
 
-        .posts {
+        .recipe-grid {
           display: flex;
         }
       `}</style>
@@ -67,13 +62,13 @@ export default function Home({ posts }) {
 
 export async function getStaticProps() {
   const res = await fetchEntries()
-  const posts = await res.map((p) => {
+  const recipes = await res.map((p) => {
     return p.fields
   })
 
   return {
     props: {
-      posts,
+      recipes,
     },
   }
 }
